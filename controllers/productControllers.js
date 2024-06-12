@@ -1,6 +1,7 @@
 import productModel from '../models/productModel.js'
+import { cloudinary } from '../cloudinary/cloudinaryConfig.js'
 
-async function getProducts(req, res) {
+const getProducts = async (req, res) => {
   try {
     const products = await productModel.find({})
     res.status(200).json(products)
@@ -8,8 +9,6 @@ async function getProducts(req, res) {
     res.status(500).json({ message: 'Fehler beim Abrufen der Produkte' })
   }
 }
-
-import { cloudinary } from '../cloudinary/cloudinaryConfig.js'
 
 const createProduct = async (req, res) => {
   // hole die Daten aus dem Request (Bild inklusive)
@@ -60,4 +59,19 @@ const createProduct = async (req, res) => {
   }
 }
 
-export { createProduct, getProducts }
+const deleteProduct = async (req, res) => {
+  const product = await productModel.findById(req.params.id)
+
+  if (product) {
+    // lösche das Bild in Cloudinary
+    await cloudinary.uploader.destroy(product.imgpub)
+    // lösche das Produkt in der Datenbank
+    await productModel.deleteOne({ _id: req.params.id })
+    res.status(200).json({ message: 'Produkt gelöscht!' })
+  } else {
+    res.status(404)
+    throw new Error('Produkt nicht gefunden!')
+  }
+}
+
+export { createProduct, getProducts, deleteProduct }
