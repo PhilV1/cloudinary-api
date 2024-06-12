@@ -1,3 +1,12 @@
+async function getProducts(req, res) {
+  try {
+    const products = await productModel.find({})
+    res.status(200).json(products)
+  } catch (error) {
+    res.status(500).json({ message: 'Fehler beim Abrufen der Produkte' })
+  }
+}
+
 async function createProduct(req, res) {
   const { name, description, image } = req.body
   try {
@@ -12,4 +21,4 @@ async function createProduct(req, res) {
   }
 }
 
-export default createProduct
+export { createProduct, getProducts }
