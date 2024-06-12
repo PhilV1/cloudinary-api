@@ -1,6 +1,7 @@
 {
   "name": "cloudinary-api",
   "version": "1.0.0",
+  "type": "module",
   "description": "Simple API with Node.js and Cloudinary",
   "main": "server.js",
   "scripts": {
