@@ -8,7 +8,7 @@ import 'dotenv/config'
 
 const app = express()
 const PORT = process.env.API_PORT || 5000
-app.use(cors())
+app.use(cors({ origin: process.env.CORS_ORIGIN, optionsSuccessStatus: 200 }))
 app.use(express.json({ limit: '30mb' }))
 app.use(express.urlencoded({ limit: '30mb', extended: true }))
 app.use('/products', productRouter)
